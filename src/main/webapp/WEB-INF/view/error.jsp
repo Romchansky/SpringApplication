@@ -5,7 +5,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>My Application</title>
+    <title>SpringApplication</title>
     <style>
         <%@include file="/WEB-INF/view/css/style.css" %>
     </style>

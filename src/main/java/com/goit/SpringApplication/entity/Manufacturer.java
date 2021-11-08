@@ -1,17 +1,19 @@
 package com.goit.SpringApplication.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
+import java.util.Objects;
 import java.util.Set;
 
 @Entity
 @Table(name = "manufacturer")
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class Manufacturer implements BaseEntity<Long>{
@@ -27,5 +29,19 @@ public class Manufacturer implements BaseEntity<Long>{
     private String name;
 
     @OneToMany(mappedBy = "manufacturer", fetch = FetchType.LAZY, cascade = CascadeType.ALL)
+    @ToString.Exclude
     private Set<Product> products;
+
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass (this) != Hibernate.getClass (o)) return false;
+        Manufacturer that = (Manufacturer) o;
+        return id != null && Objects.equals (id, that.id);
+    }
+
+    @Override
+    public int hashCode() {
+        return getClass ().hashCode ();
+    }
 }

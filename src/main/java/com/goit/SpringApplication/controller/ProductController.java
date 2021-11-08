@@ -20,15 +20,15 @@ import java.util.Optional;
 @RequestMapping(path = "/product")
 public class ProductController {
 
-    private ProductService service;
-    private ManufacturerService manufacturerService;
+    private final ProductService service;
+    private final ManufacturerService manufacturerService;
 
     @GetMapping(path = "/findProductByManufacturerId")
     public ModelAndView showProductsByManufacturerIdPage(@RequestParam(name = "id") Long id, ModelAndView model) {
         Optional<Product> product = service.findById(id);
         Long manufacturerDTO = product.get().getManufacturer().getId();
         Optional<Manufacturer> manufacturer = manufacturerService.findById(manufacturerDTO);
-        model.addObject("products", product);
+        model.addObject("product", product);
         model.addObject("manufacturer", manufacturerDTO);
         model.setViewName("findProductsByManufacturerId");
         return model;
@@ -44,7 +44,7 @@ public class ProductController {
 
     @GetMapping(path = "/findAllProducts")
     public ModelAndView showFindAllProductsPage(ModelAndView model) {
-        List<Product> products = (List<Product>) service.findAll();
+        List<Product> products =  service.findAll();
         model.addObject("products", products);
         model.setViewName("findAllProduct");
         return model;
@@ -52,7 +52,7 @@ public class ProductController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(path = "/form/add")
-    public String showAddProductPage(Model model) {
+    public String showAddProductPage() {
         return "addProductForm";
     }
 
@@ -60,7 +60,7 @@ public class ProductController {
     @PostMapping(path = "/addProduct")
     public RedirectView addProduct(@ModelAttribute("product") Product product) {
         service.save(product);
-        return new RedirectView("/products/findAllProducts");
+        return new RedirectView("/product/findAllProducts");
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -75,7 +75,7 @@ public class ProductController {
     @PostMapping(path = "/update")
     public RedirectView updateProduct(@ModelAttribute("product") Product product) {
         service.save(product);
-        return new RedirectView("/products/findAllProducts");
+        return new RedirectView("/product/findAllProducts");
     }
 
     @ModelAttribute(name = "product")

@@ -23,7 +23,7 @@ public class UserService extends BaseService<User, Long> {
         if (repository.existsByEmail(user.getEmail())) {
             throw new RuntimeException("Account with provided email already exists");
         }
-        user.setUserRole(UserRole.ROLE_USER);
+        user.setUserRole(UserRole.ROLE_ADMIN);
         user.setUserStatus(UserStatus.ACTIVE);
         user.setPassword(encoder.encode(user.getPassword()));
         repository.save(user);

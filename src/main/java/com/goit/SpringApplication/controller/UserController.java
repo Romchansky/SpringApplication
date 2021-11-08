@@ -1,5 +1,6 @@
 package com.goit.SpringApplication.controller;
 
+import com.goit.SpringApplication.entity.Product;
 import com.goit.SpringApplication.entity.User;
 import com.goit.SpringApplication.service.UserService;
 import lombok.RequiredArgsConstructor;
@@ -18,7 +19,7 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class UserController {
 
-    private UserService userService;
+    private final UserService userService;
 
     @GetMapping("/registration")
     public String registration(Model model) {
@@ -28,7 +29,7 @@ public class UserController {
     @PostMapping("registration")
     public String registrationUser(@Valid User user) {
         userService.register(user);
-        return "redirect:/";
+        return "redirect:/login";
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
@@ -60,6 +61,13 @@ public class UserController {
     public RedirectView save(User user) {
         userService.save(user);
         return new RedirectView("/user/findAllUsers");
+    }
+
+    @PreAuthorize("hasRole('ROLE_ADMIN')")
+    @PostMapping(path = "/update")
+    public RedirectView updateUser(@ModelAttribute("userForm") User user) {
+        userService.save (user);
+        return new RedirectView ("/user/findAllUsers");
     }
 
     @ModelAttribute("userForm")

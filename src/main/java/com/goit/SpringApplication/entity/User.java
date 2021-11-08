@@ -1,16 +1,18 @@
 package com.goit.SpringApplication.entity;
 
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Email;
+import java.util.Objects;
 
 @Entity
 @Table(name = "user")
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class User implements BaseEntity<Long>{
@@ -42,5 +44,16 @@ public class User implements BaseEntity<Long>{
     private UserStatus userStatus;
 
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass (this) != Hibernate.getClass (o)) return false;
+        User user = (User) o;
+        return id != null && Objects.equals (id, user.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return getClass ().hashCode ();
+    }
 }

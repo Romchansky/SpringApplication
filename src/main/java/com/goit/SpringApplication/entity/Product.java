@@ -1,16 +1,18 @@
 package com.goit.SpringApplication.entity;
 
-import lombok.AllArgsConstructor;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
+import org.hibernate.Hibernate;
 
 import javax.persistence.*;
 import javax.validation.constraints.Size;
 import java.math.BigDecimal;
+import java.util.Objects;
 
 @Entity
 @Table(name = "product")
-@Data
+@Getter
+@Setter
+@ToString
 @AllArgsConstructor
 @NoArgsConstructor
 public class Product implements BaseEntity<Long>{
@@ -31,5 +33,16 @@ public class Product implements BaseEntity<Long>{
     @JoinColumn(name = "manufacturer_id", nullable = false)
     private Manufacturer manufacturer;
 
+    @Override
+    public boolean equals(Object o) {
+        if (this == o) return true;
+        if (o == null || Hibernate.getClass (this) != Hibernate.getClass (o)) return false;
+        Product product = (Product) o;
+        return id != null && Objects.equals (id, product.id);
+    }
 
+    @Override
+    public int hashCode() {
+        return getClass ().hashCode ();
+    }
 }

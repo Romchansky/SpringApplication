@@ -11,6 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.view.RedirectView;
 
+import java.util.List;
 import java.util.Optional;
 
 @Controller
@@ -18,11 +19,11 @@ import java.util.Optional;
 @RequiredArgsConstructor
 public class ManufacturerController {
 
-    private  ManufacturerService service;
+    private final  ManufacturerService service;
 
     @GetMapping(path = "/findAllManufacturers")
     public ModelAndView showAllManufacturersPage(ModelAndView model) {
-        Iterable<Manufacturer> manufacturers = service.findAll();
+        List<Manufacturer> manufacturers = service.findAll();
         model.addObject("manufacturers", manufacturers);
         model.setViewName("findAllManufacturers");
         return model;
@@ -53,7 +54,7 @@ public class ManufacturerController {
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(path = "/form/add")
-    public String showAddFormManufacturerPage(Model model) {
+    public String showAddFormManufacturerPage() {
         return "addManufacturerForm";
     }
 
@@ -61,14 +62,14 @@ public class ManufacturerController {
     @PostMapping(path = "/addManufacturer")
     public RedirectView addManufacturer(@ModelAttribute("manufacturer") Manufacturer manufacturer) {
         service.save(manufacturer);
-        return new RedirectView("/manufacturers/findAllManufacturers");
+        return new RedirectView("/manufacturer/findAllManufacturers");
     }
 
     @PreAuthorize("hasRole('ROLE_ADMIN')")
     @GetMapping(path = "/delete")
     public RedirectView delete(@RequestParam("id") Long id) {
         service.deleteById(id);
-        return new RedirectView("/manufacturers/findAllManufacturers");
+        return new RedirectView("/manufacturer/findAllManufacturers");
     }
 
     @ModelAttribute(name = "manufacturer")
